@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages()                              
     {
         return [
             'name.required' => 'အမည်ထည့်ရန်လိုအပ်သည်။',

@@ -16,12 +16,15 @@ export default {
     },
     methods: {
         view(page = 1) {
+            this.$Progress.start()
             axios.get(`http://127.0.0.1:8000/api/products?page=${page}&search=${this.search}`)
                 .then((response) => {
                     this.products = response.data;
+                    this.$Progress.finish()
                 })
                 .catch(error => {
-                    console.warn('Not good man :(');
+                    this.$Progress.fail()
+                    console.log(error);
                 })
         },
         create() {
@@ -35,10 +38,14 @@ export default {
                 this.view();
                 this.product.name = '';
                 this.product.price = '';
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Created successfully!'
+                })
             })
-            .catch(error => {
-                console.warn(error.response.data.message);
-            })
+                .catch(error => {
+                    console.warn(error.response.data.message);
+                })
         },
         edit(product) {
             this.isEditMode = true;
@@ -51,16 +58,36 @@ export default {
                     this.view();
                     this.isEditMode = false;
                     this.product.reset();
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Updated successfully!'
+                    })
                 }).catch(error => {
                     console.warn(error.response.data.message);
                 })
         },
         destroy(id) {
-            if (!confirm('Are you sure to delete?')) {
-                return;
-            }
-            axios.delete(`http://127.0.0.1:8000/api/products/${id}`)
-                .then(() => this.view())
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`http://127.0.0.1:8000/api/products/${id}`)
+                        .then(() => {
+                            this.view();
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Deleted successfully!'
+                            })
+                        })
+
+                }
+            })
         }
     },
     created() {

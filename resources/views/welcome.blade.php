@@ -7,12 +7,13 @@
 
     <title>Laravel Spa</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 </head>
 
 <body>
     <div id="app">
         <product-component></product-component>
+        <vue-progress-bar></vue-progress-bar>
     </div>
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
